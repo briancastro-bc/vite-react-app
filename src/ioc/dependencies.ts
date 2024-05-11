@@ -12,7 +12,7 @@ export type Injectable = {
 const dependencies = [
 	{
 		id: 'baseUrl',
-		class: import.meta.VITE_BACKEND_URL,
+		class: import.meta.env.VITE_BACKEND_URL,
 		type: 'constant',
 	},
 ] as Injectable[];

@@ -1,4 +1,5 @@
 import { FC, } from 'react';
+import { RecoilRoot, } from 'recoil';
 import { TFunction, } from 'i18next';
 import { RouterProvider, } from 'react-router-dom';
 import { Context, } from '@redtea/react-inversify';
@@ -15,10 +16,14 @@ type AppProps = object & {
 const App: FC<AppProps> = ({
   container,
 }) => {
+  
+
   return (
-    <Context.Provider value={container}>
-      <RouterProvider router={Router} />
-    </Context.Provider>
+    <RecoilRoot>
+      <Context.Provider value={container}>
+        <RouterProvider router={Router} />
+      </Context.Provider>
+    </RecoilRoot>
   );
 }
 
