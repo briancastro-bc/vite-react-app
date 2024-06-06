@@ -1,11 +1,21 @@
 import 'reflect-metadata';
-import { StrictMode, } from 'react';
+
+import { 
+  Suspense, 
+  StrictMode, 
+} from 'react';
 import { createRoot, } from 'react-dom/client';
+import { 
+  ThemeProvider, 
+  StyledEngineProvider, 
+} from '@mui/material';
 
 import { use, TFunction, } from 'i18next';
 import { initReactI18next,  } from 'react-i18next';
 
 import LanguageDetector from 'i18next-browser-languagedetector';
+
+import { customTheme, } from '@theme/main';
 
 import { bootstrapContainer, Container, } from '@ioc/inversify';
 
@@ -54,12 +64,22 @@ async function bootstrap(): Promise<Setup> {
 
 bootstrap()
   .then(setup => {
+    const {
+      i18n,
+    } = setup;
+
     const rootElement = document.getElementById('root')!;
 
     const root = createRoot(rootElement)
     root.render(
-        <StrictMode>
-          <App {...setup}/>
+        <StrictMode>  
+          <Suspense fallback={<p>{i18n('common.loading.basic')}</p>}>
+            <ThemeProvider theme={customTheme}>
+              <StyledEngineProvider injectFirst>
+                <App {...setup}/>
+              </StyledEngineProvider>
+            </ThemeProvider>
+          </Suspense>
         </StrictMode>
       );
   })

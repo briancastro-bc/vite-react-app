@@ -7,10 +7,13 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
+      "@root/*": ["./*"],
       "@ioc/*": ["./src/ioc/*"],
       "@apps/*": ["./src/apps/*"],
       "@assets/*": ["./src/assets/*"],
-      "@contexts/*": ["./src/contexts/*"],
+      "@Shared/*": ["./src/apps/Shared/*"],
+      "@contexts/*": ["./src/contexts/*", "./src/apps/Shared/contexts/*"],
+      "@theme/*": ["./src/apps/Shared/Theme/*"],
     },
 
     /* Bundler mode */

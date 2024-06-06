@@ -5,6 +5,7 @@ import { RouterProvider, } from 'react-router-dom';
 import { Context, } from '@redtea/react-inversify';
 
 import { Container, } from '@ioc/inversify';
+import { socket, SocketContext, } from '@apps/Shared/contexts/socket';
 
 import Router from './Router';
 
@@ -16,12 +17,12 @@ type AppProps = object & {
 const App: FC<AppProps> = ({
   container,
 }) => {
-  
-
   return (
     <RecoilRoot>
       <Context.Provider value={container}>
-        <RouterProvider router={Router} />
+        <SocketContext.Provider value={socket}>
+          <RouterProvider router={Router} />
+        </SocketContext.Provider>
       </Context.Provider>
     </RecoilRoot>
   );

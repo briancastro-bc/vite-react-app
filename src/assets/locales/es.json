@@ -1,6 +1,79 @@
 {
   "translation": {
-    "hello": "Hola Mundo",
+    "common": {
+      "loading": {
+        "basic": "Cargando..."
+      },
+      "buttons": {
+        "save": "Guardar",
+        "send": "Enviar",
+        "cancel": "Cancelar"
+      }
+    },
+    "chat": {
+      "title": "Mensajes"
+    },
+    "profileSettings": {
+      "title": "Cuenta & configuraci\u00f3n",
+      "steps": {
+        "0": {
+          "title": "Perfil",
+          "subtitle": "Perfil p\u00fablico",
+          "description": "Configura tu informaci\u00f3n b\u00e1sica visible para todos los usuarios de la plataforma.",
+          "id": {
+            "label": "",
+            "placeholder": ""
+          },
+          "username": {
+            "title": "Usuario",
+            "description": ""
+          },
+          "preferredUsername": {
+            "title": "Usuario",
+            "label": "Nombre de usuario",
+            "placeholder": ""
+          },
+          "fullName": {
+            "title": "Nombre completo",
+            "description": ""
+          },
+          "givenName": {
+            "label": "Primer nombre",
+            "placeholder": "Ej. Juan"
+          },
+          "middleName": {
+            "label": "Segundo nombre",
+            "placeholder": "Ej. Pablo"
+          },
+          "familyName": {
+            "label": "Apellidos",
+            "placeholder": "Ej. S\u00e1nchez P\u00e9rez"
+          },
+          "biography": {
+            "title": "Biograf\u00eda",
+            "label": "Acerca de ti",
+            "placeholder": "Lorem ipsum"
+          },
+          "birthdate": {
+            "title": "Fecha de nacimiento",
+            "label": "Cumplea\u00f1os",
+            "placeholder": "Ej. 07/03/2004"
+          }
+        },
+        "1": {
+          "title": "Seguridad"
+        },
+        "2": {
+          "title": "Preferencias"
+        },
+        "3": {
+          "title": "Direcci\u00f3n"
+        },
+        "4": {
+          "title": "Facturaci\u00f3n"
+        }
+      }
+    },
     "notFound": {
       "message": ""
     }

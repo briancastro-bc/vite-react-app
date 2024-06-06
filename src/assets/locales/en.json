@@ -1,5 +1,22 @@
 {
   "translation": {
-    "hello": "World"
+    "common": {
+      "loading": {
+        "basic": "Loading..."
+      }
+    },
+    "profileSettings": {
+      "title": "Account & Settings",
+      "steps": {
+        "0": "Profile",
+        "1": "Security",
+        "2": "Preferences",
+        "3": "Address",
+        "4": "Billing"
+      }
+    },
+    "notFound": {
+      "message": ""
+    }
   }
 }
