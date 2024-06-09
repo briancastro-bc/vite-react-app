@@ -1,9 +1,14 @@
-import { createTheme, } from '@mui/material';
+import { 
+  createTheme, 
+  Icon,
+  MenuItem,
+} from '@mui/material';
 import resolveConfig from 'tailwindcss/resolveConfig';
 
 import tailwindConfig from '@root/tailwind.config';
 
 import Button from './Button.tsx';
+import Snackbar from './Snackbar.tsx';
 import TextField from './TextField.tsx';
 import Typography from './Typography.tsx';
 
@@ -30,7 +35,10 @@ export const customTheme = createTheme({
 });
 
 export { 
+  Icon,
   Button,
+  Snackbar,
+  MenuItem,
   TextField,
   Typography,
 }

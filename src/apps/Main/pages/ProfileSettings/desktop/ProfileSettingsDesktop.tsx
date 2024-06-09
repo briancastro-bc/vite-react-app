@@ -10,6 +10,8 @@ import {
 import { format, } from 'date-fns';
 import { useTranslation, } from 'react-i18next';
 
+import { Typography } from '@theme/main';
+
 import { stepperState, } from '@apps/Main/state/atoms';
 
 import { 
@@ -24,10 +26,13 @@ import {
 import NavigationLink from '../Components/NavigationLink';
 
 import ProfileSettingsStepper from '../ProfileSettingsStepper';
-import PublicProfileStep from '../Steps/PublicProfileStep';
-import { Typography } from '@root/src/apps/Shared/Theme/main';
+import ProfileStep from '../Steps/ProfileStep';
+import SecurityStep from '../Steps/SecurityStep';
+import PreferencesStep from '../Steps/PreferencesStep';
+import AddressStep from '../Steps/AddressStep';
+import BillingStep from '../Steps/BillingStep';
 
-const INTERVAL_DELAY_IN_MS = 1000; 
+const INTERVAL_DELAY_IN_MS = 900; 
 
 type ProfileSettingsDesktopProps = object;
 
@@ -136,8 +141,11 @@ const ProfileSettingsDesktop: FC<ProfileSettingsDesktopProps> = () => {
           width: `calc(100vw - ${sidebarRef.current?.offsetWidth}px)`
         }}>
         <ProfileSettingsStepper currentStep={stepper.currentStep}>
-          <PublicProfileStep onActionTriggered={(...args) => handleActionTriggered(...args)} />
-          <h2>Adios</h2>
+          <ProfileStep onActionTriggered={handleActionTriggered} />
+          <SecurityStep onActionTriggered={handleActionTriggered} />
+          <PreferencesStep onActionTriggered={handleActionTriggered} />
+          <AddressStep onActionTriggered={handleActionTriggered} />
+          <BillingStep onActionTriggered={handleActionTriggered} />
         </ProfileSettingsStepper>
       </div>
     </section>

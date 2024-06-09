@@ -8,6 +8,9 @@
         "save": "Guardar",
         "send": "Enviar",
         "cancel": "Cancelar"
+      },
+      "messages": {
+        "copy": "Copiado en el portapapeles"
       }
     },
     "chat": {
@@ -18,10 +21,20 @@
       "steps": {
         "0": {
           "title": "Perfil",
-          "subtitle": "Perfil p\u00fablico",
-          "description": "Configura tu informaci\u00f3n b\u00e1sica visible para todos los usuarios de la plataforma.",
+          "publicProfile": {
+            "subtitle": "Perfil p\u00fablico",
+            "description": "Configura tu informaci\u00f3n b\u00e1sica visible para todos los usuarios de la plataforma."
+          },
+          "personalInformation": {
+            "subtitle": "Informaci\u00f3n personal",
+            "description": "Configura tus datos personales e informaci\u00f3n relevante para la plataforma"
+          },
           "id": {
-            "label": "",
+            "label": "Identificador",
+            "placeholder": ""
+          },
+          "email": {
+            "label": "Correo electr\u00f3nico",
             "placeholder": ""
           },
           "username": {
@@ -52,25 +65,79 @@
           "biography": {
             "title": "Biograf\u00eda",
             "label": "Acerca de ti",
-            "placeholder": "Lorem ipsum"
+            "placeholder": ""
           },
           "birthdate": {
             "title": "Fecha de nacimiento",
             "label": "Cumplea\u00f1os",
             "placeholder": "Ej. 07/03/2004"
+          },
+          "identification": {
+            "title": "Identificaci\u00f3n",
+            "identificationType": {
+              "label": "Tipo de documento",
+              "placeholder": ""
+            },
+            "identificationNumber": {
+              "label": "N\u00famero de documento",
+              "placeholder": ""
+            },
+            "identificationIssueDate": {
+              "label": "Fecha de expedici\u00f3n",
+              "placeholder": ""
+            }
+          },
+          "phone": {
+            "title": "Contacto",
+            "phoneNumberPrefix": {
+              "label": "Prefijo",
+              "placeholder": "Ej. +57"
+            },
+            "phoneNumber": {
+              "label": "Número de tel\u00e9fono",
+              "placeholder": ""
+            }
           }
         },
         "1": {
-          "title": "Seguridad"
+          "title": "Seguridad",
+          "security": {
+            "subtitle": "Informaci\u00f3n de seguridad",
+            "description": "Configura los aspectos de seguridad para mantener tu cuenta protegida ante posibles amenazas"
+          },
+          "password": {
+            "title": "Cambiar contrase\u00f1a",
+            "description": "Actualiza tu contrase\u00f1a",
+            "newPassword": {
+              "label": "Nueva contrase\u00f1a",
+              "placeholder": ""
+            },
+            "newPasswordConfirmation": {
+              "label": "Confirmar contrase\u00f1a",
+              "placeholder": ""
+            }
+          }
         },
         "2": {
-          "title": "Preferencias"
+          "title": "Preferencias",
+          "preferences": {
+            "subtitle": "Ajustes adicionales",
+            "description": "Configura como quieres visualizar la interfaz de usuario y otros aspectos de la aplicaci\u00f3n"
+          }
         },
         "3": {
-          "title": "Direcci\u00f3n"
+          "title": "Direcci\u00f3n",
+          "address": {
+            "subtitle": "Ubicaci\u00f3n",
+            "description": "Configura tu información de ubicación tales como direcci\u00f3n de residencia"
+          }
         },
         "4": {
-          "title": "Facturaci\u00f3n"
+          "title": "Facturaci\u00f3n",
+          "billing": {
+            "subtitle": "Detalles de facturaci\u00f3n",
+            "description": "Configura como quieres recibir la informaci\u00f3n relacionada a tus facturas. Adem\u00e1s obten un detalle global de tus compras"
+          }
         }
       }
     },
