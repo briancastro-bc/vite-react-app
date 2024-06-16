@@ -116,6 +116,18 @@
               "label": "Confirmar contrase\u00f1a",
               "placeholder": ""
             }
+          },
+          "verification": {
+            "title": "Verificaci\u00f3n de la cuenta",
+            "description": "Aseg\u00farate de verificar tus datos personales para garantizar que puedas acceder a todas las funcionalidades de la aplicaci\u00f3n.",
+            "emailVerified": {
+              "label": "Correo electr\u00f3nico verificado",
+              "placeholder": "Lorem ipsum"
+            },
+            "phoneVerified": {
+              "label": "N\u00famero de tel\u00e9fono verificado",
+              "placeholder": "Lorem ipsum"
+            }
           }
         },
         "2": {
@@ -129,7 +141,47 @@
           "title": "Direcci\u00f3n",
           "address": {
             "subtitle": "Ubicaci\u00f3n",
-            "description": "Configura tu información de ubicación tales como direcci\u00f3n de residencia"
+            "description": "Configura tu información de ubicación tales como direcci\u00f3n de residencia."
+          },
+          "formatted": {
+            "title": "Direcci\u00f3n completa",
+            "description": "En esta secci\u00f3n aparecer\u00e1 tu direcci\u00f3n completa teniendo en cuenta toda la informaci\u00f3n.",
+            "label": "",
+            "placeholder": ""
+          },
+          "location": {
+            "title": "Localizaci\u00f3n",
+            "description": "",
+            "country": {
+              "label": "Pa\u00eds",
+              "placeholder": ""
+            },
+            "region": {
+              "label": "Departamento",
+              "placeholder": ""
+            },
+            "locality": {
+              "label": "Ciudad/Municipio",
+              "placeholder": ""
+            }
+          },
+          "complement": {
+            "title": "Complemento",
+            "description": "Lugar de tu ciudad donde estas ubicado.",
+            "street": {
+              "label": "Direcci\u00f3n",
+              "placeholder": "Ej. Calle 1 N #00-00"
+            },
+            "streetComplement": {
+              "label": "Direcci\u00f3n adicional",
+              "placeholder": "Ej. Apto 2"
+            }
+          },
+          "zip": {
+            "title": "C\u00f3digo postal",
+            "description": "",
+            "label": "",
+            "placeholder": "Ej. 610001"
           }
         },
         "4": {

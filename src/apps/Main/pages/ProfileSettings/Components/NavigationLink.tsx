@@ -1,13 +1,14 @@
 import {
-  memo,
   FC,
+  memo,
   useRef,
+  ReactNode,
   MouseEvent,
   ComponentPropsWithRef,
 } from 'react';
 
 type NavigationLinkProps = object & ComponentPropsWithRef<'a'> & {
-  icon: string;
+  icon: ReactNode;
   active?: boolean;
 };
 
@@ -44,7 +45,7 @@ const NavigationLink: FC<NavigationLinkProps> = ({
       onClick={handleClick}
       {...props}>
       <span className='h-6 w-6 flex items-center justify-center'>
-        <i className={`text-xl ${icon}`} />
+        {icon}
       </span>
       <span>
         {children}

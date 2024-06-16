@@ -347,7 +347,7 @@ const ProfileStep: FC<ProfileStepProps> = ({
                     )} 
                     control={control}
                     name='identificationNumber'
-                    defaultValue={'1098306124'} />
+                    defaultValue={''} />
                 </div>
                 <div className='col-span-full'>
                   <Controller

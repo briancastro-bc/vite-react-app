@@ -9,6 +9,14 @@ export const SecuritySchema = z.object({
     z.coerce
       .string(),
   ),
+  emailVerified: z.optional(
+    z.coerce
+    .boolean(),
+  ),
+  phoneVerified: z.optional(
+    z.coerce
+      .boolean(),
+  ),
 });
 
 export type Security = z.infer<typeof SecuritySchema>;

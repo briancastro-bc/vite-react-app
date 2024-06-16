@@ -9,6 +9,7 @@ import tailwindConfig from '@root/tailwind.config';
 
 import Button from './Button.tsx';
 import Snackbar from './Snackbar.tsx';
+import Checkbox from './Checkbox.tsx';
 import TextField from './TextField.tsx';
 import Typography from './Typography.tsx';
 
@@ -38,6 +39,7 @@ export {
   Icon,
   Button,
   Snackbar,
+  Checkbox,
   MenuItem,
   TextField,
   Typography,

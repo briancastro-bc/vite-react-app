@@ -10,6 +10,12 @@ import {
 import { format, } from 'date-fns';
 import { useTranslation, } from 'react-i18next';
 
+import Person from '@mui/icons-material/Person';
+import Lock from '@mui/icons-material/Lock';
+import Star from '@mui/icons-material/Star';
+import Home from '@mui/icons-material/Business';
+import Wallet from '@mui/icons-material/AccountBalanceWallet';
+
 import { Typography } from '@theme/main';
 
 import { stepperState, } from '@apps/Main/state/atoms';
@@ -102,31 +108,31 @@ const ProfileSettingsDesktop: FC<ProfileSettingsDesktopProps> = () => {
           </div>
           <nav className='grow h-full flex flex-col gap-y-2 px-6 mt-4'>
             <NavigationLink 
-              icon='bx bx-user' 
+              icon={<Person />}
               active={stepper.currentStep === PROFILE_STEP}
               onClick={() => handleActionTriggered('step', PROFILE_STEP)}>
               {t('profileSettings.steps.0.title')} 
             </NavigationLink>
             <NavigationLink 
-              icon='bx bx-lock'
+              icon={<Lock />}
               active={stepper.currentStep === SECURITY_STEP}
               onClick={() => handleActionTriggered('step', SECURITY_STEP)}>
               {t('profileSettings.steps.1.title')} 
             </NavigationLink>
             <NavigationLink 
-              icon='bx bx-star'
+              icon={<Star />}
               active={stepper.currentStep === PREFERENCES_STEP}
               onClick={() => handleActionTriggered('step', PREFERENCES_STEP)}>
               {t('profileSettings.steps.2.title')} 
             </NavigationLink>
             <NavigationLink 
-              icon='bx bx-home-smile'
+              icon={<Home />}
               active={stepper.currentStep === ADDRESS_STEP}
               onClick={() => handleActionTriggered('step', ADDRESS_STEP)}>
               {t('profileSettings.steps.3.title')} 
             </NavigationLink>
             <NavigationLink 
-              icon='bx bx-wallet'
+              icon={<Wallet />}
               active={stepper.currentStep === BILLING_STEP}
               onClick={() => handleActionTriggered('step', BILLING_STEP)}>
               {t('profileSettings.steps.4.title')} 
