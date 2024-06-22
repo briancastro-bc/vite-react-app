@@ -2,9 +2,9 @@ import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 import { SnackbarProvider, } from 'notistack';
 
-import {
-  Snackbar,
-} from '@theme/main';
+// import {
+//   Snackbar,
+// } from '@theme/main';
 
 import Chat from '@apps/Main/pages/Chat/Chat';
 
@@ -12,7 +12,7 @@ const SNACKBAR_DURATION_IN_MS = 10000;
 
 type RootProps = object;
 
-const Root: FC<RootProps> = () => {
+const RootLayout: FC<RootProps> = () => {
   return (
     <SnackbarProvider
       preventDuplicate
@@ -30,4 +30,4 @@ const Root: FC<RootProps> = () => {
   );
 };
 
-export default Root;
+export default RootLayout;

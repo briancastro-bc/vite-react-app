@@ -1,5 +1,7 @@
 import { Container, BindingScopeEnum, } from 'inversify';
 
+import { FetchHttpRepository, } from '@contexts/shared/infrastructure/repositories/FetchHttpRepository';
+
 export type InjectableType = 'constant' | 'class';
 
 export type Injectable = {
@@ -11,9 +13,14 @@ export type Injectable = {
 
 const dependencies = [
 	{
-		id: 'baseUrl',
+		id: 'BACKEND_URL',
 		class: import.meta.env.VITE_BACKEND_URL,
 		type: 'constant',
+	},
+	{
+		id: FetchHttpRepository.name,
+		class: FetchHttpRepository,
+		type: 'class',
 	},
 ] as Injectable[];
 

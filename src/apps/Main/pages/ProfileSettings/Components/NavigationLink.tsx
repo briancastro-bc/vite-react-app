@@ -41,7 +41,7 @@ const NavigationLink: FC<NavigationLinkProps> = ({
   return (
     <a
       ref={elementRef}
-      className={`flex items-center gap-x-2 px-4 py-4 rounded-lg border border-transparent font-bold text-base hover:cursor-pointer hover:bg-juridica-100 hover:text-juridica-400 ${isActiveStyle(active)}`}
+      className={`flex items-center gap-x-4 px-4 py-4 rounded-lg border border-transparent font-bold text-base hover:cursor-pointer hover:bg-juridica-100 hover:text-juridica-400 ${isActiveStyle(active)}`}
       onClick={handleClick}
       {...props}>
       <span className='h-6 w-6 flex items-center justify-center'>

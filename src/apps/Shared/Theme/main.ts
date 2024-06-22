@@ -1,6 +1,7 @@
 import { 
   createTheme, 
   Icon,
+  Chip,
   MenuItem,
 } from '@mui/material';
 import resolveConfig from 'tailwindcss/resolveConfig';
@@ -37,6 +38,7 @@ export const customTheme = createTheme({
 
 export { 
   Icon,
+  Chip,
   Button,
   Snackbar,
   Checkbox,

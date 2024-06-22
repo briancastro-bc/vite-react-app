@@ -2,13 +2,16 @@ import { Container, } from 'inversify';
 
 import { bindCoreDependencies } from './dependencies';
 
-export function bootstrapContainer(): Container {
-  const container = new Container({
-    defaultScope: 'Singleton',
-  });
-  // container.load();
+import MainContainer from '@apps/Main/container';
 
-  return bindCoreDependencies(container);
+export function bootstrapContainer(): Container {
+  const container = bindCoreDependencies(new Container({
+    defaultScope: 'Singleton',
+  }));
+
+  container.load(MainContainer);
+
+  return container;
 }
 
 export * from 'inversify';

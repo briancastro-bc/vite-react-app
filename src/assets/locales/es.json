@@ -7,14 +7,62 @@
       "buttons": {
         "save": "Guardar",
         "send": "Enviar",
-        "cancel": "Cancelar"
+        "verify": "Verificar",
+        "cancel": "Cancelar",
+        "goback": "Ir atr\u00e1s"
       },
       "messages": {
-        "copy": "Copiado en el portapapeles"
+        "copy": "Copiado en el portapapeles: {{ message }}"
+      },
+      "errors": {
+        "files": {
+          "size": "Se ha superado el limite de peso para el archivo. Limite actual: {{ size }}kb",
+          "format": "El formato del archivo es inválido. Formatos permitidos: {{ allowed }}"
+        }
+      },
+      "dates": {
+        "lastUpdate": "\u00DAltima modificaci\u00f3n: {{ date }}"
+      },
+      "personTypes": {
+        "legal": "Persona Juridica",
+        "natural": "Persona Natural"
+      },
+      "genderTypes": {
+        "male": "\u00c9l",
+        "female": "Ella",
+        "not_specified": "Indeterminado"
+      },
+      "identificationTypes": {
+        "CC": "C\u00e9dula de Ciudadan\u00eda",
+        "CE": "C\u00e9dula de Entranjer\u00eda",
+        "PA": "Pasaporte",
+        "RC": "Registro Civil de Nacimiento",
+        "CD": "Carnet Diplom\u00e1tico",
+        "DE": "Documento Extranjero",
+        "NIP": "N\u00famero de Identificati\u00f1n Personal"
       }
     },
     "chat": {
       "title": "Mensajes"
+    },
+    "verification": {
+      "email": {
+        "title": "Verificar correo electr\u00f3nico",
+        "description": "¡Hola {{ name }}! Acabamos de enviar un correo electr\u00f3nico de verificaci\u00f3n al siguiente email {{ email }}. Si no lo ves, revisa la carpeta de SPAM.",
+        "label": "C\u00f3digo de 6 digitos",
+        "placeholder": "Ej. 123456"
+      },
+      "phone": {
+        "title": "Verificar n\u00famero de tel\u00e9fono",
+        "description": "¡Hola {{ name }}! Acabamos de enviar un c\u00f3digo de verificaci\u00f3n a tu n\u00famero de celular {{ phoneNumber }}.",
+        "label": "C\u00f3digo de 6 digitos",
+        "placeholder": "Ej. 123456"
+      },
+      "success": "Whoohoo! Tu cuenta ha sido verificada.",
+      "errors": {
+        "emptyCode": "Oops! Necesitas el c\u00f3digo de verificaci\u00f3n",
+        "unsuccessfully": "Oops! Algo sali\u00f3 mal mientras intentabamos verificar tu cuenta. Reintenta"
+      }
     },
     "profileSettings": {
       "title": "Cuenta & configuraci\u00f3n",
@@ -97,6 +145,11 @@
               "label": "Número de tel\u00e9fono",
               "placeholder": ""
             }
+          },
+          "gender": {
+            "title": "G\u00e9nero",
+            "label": "Te identificas como",
+            "placeholder": "Selecciona tu g\u00e9nero"
           }
         },
         "1": {
@@ -119,14 +172,14 @@
           },
           "verification": {
             "title": "Verificaci\u00f3n de la cuenta",
-            "description": "Aseg\u00farate de verificar tus datos personales para garantizar que puedas acceder a todas las funcionalidades de la aplicaci\u00f3n.",
-            "emailVerified": {
-              "label": "Correo electr\u00f3nico verificado",
-              "placeholder": "Lorem ipsum"
-            },
-            "phoneVerified": {
-              "label": "N\u00famero de tel\u00e9fono verificado",
-              "placeholder": "Lorem ipsum"
+            "description": "Verificar tu cuenta garantiza que puedas acceder a todas las funcionalidades de la aplicaci\u00f3n y mantener tu cuenta segura.",
+            "emailVerified": "Correo electr\u00f3nico verificado",
+            "emailUnverified": "Verificar email",
+            "phoneVerified": "N\u00famero de tel\u00e9fono verificado",
+            "phoneUnverified": "Verificar n\u00famero de tel\u00e9fono",
+            "success": "Whoohoo! Hemos enviado el c\u00f3digo de verificaci\u00f3n",
+            "errors": {
+              "unsuccessfully": "Oops! No pudimos enviar el código de verificación. Reintenta más tarde."
             }
           }
         },
@@ -190,6 +243,9 @@
             "subtitle": "Detalles de facturaci\u00f3n",
             "description": "Configura como quieres recibir la informaci\u00f3n relacionada a tus facturas. Adem\u00e1s obten un detalle global de tus compras"
           }
+        },
+        "5": {
+          "title": "Gestor"
         }
       }
     },

@@ -1,5 +1,7 @@
 import * as z from 'zod';
 
+import { IDENTIFICATION_TYPE } from '@contexts/shared/domain/value-objects';
+
 export const PersonalInformationSchema = z.object({
   gender: z.optional(
     z.coerce
@@ -11,9 +13,15 @@ export const PersonalInformationSchema = z.object({
       .readonly(),
   ),
   identificationType: z.optional(
-    z.coerce
-      .string()
-      .readonly(),
+    z.enum([ 
+      IDENTIFICATION_TYPE.CC.codeName, 
+      IDENTIFICATION_TYPE.CD.codeName,
+      IDENTIFICATION_TYPE.CE.codeName,
+      IDENTIFICATION_TYPE.DE.codeName,
+      IDENTIFICATION_TYPE.NIP.codeName,
+      IDENTIFICATION_TYPE.PA.codeName,
+      IDENTIFICATION_TYPE.RC.codeName,
+    ])
   ),
   identificationIssueDate: z.optional(
     z.coerce

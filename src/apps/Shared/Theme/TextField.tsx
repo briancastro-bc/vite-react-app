@@ -50,16 +50,12 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>((
     e.stopPropagation();
 
     const rawInputElement = (
-      (args?.inputRef ?? inputRef)
-        .current
-        ?.firstElementChild as HTMLInputElement
-    ) ?? (
       inputRef
         .current
         ?.getElementsByTagName('input')[0] as HTMLInputElement
     );
 
-    const value = rawInputElement?.value ?? '';
+    const value = rawInputElement?.defaultValue ?? rawInputElement?.value ?? '';
 
     await navigator
       .clipboard
@@ -71,7 +67,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>((
 
     if (snackbarRef.current) closeSnackbar(snackbarRef.current)
 
-    snackbarRef.current = enqueueSnackbar(t('common.messages.copy'), {
+    snackbarRef.current = enqueueSnackbar(t('common.messages.copy', { message: cliptText, }), {
       variant: 'default',
     });
 
@@ -83,10 +79,6 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>((
     e.stopPropagation();
 
     const rawInputElement = (
-      (args.inputRef ?? inputRef)
-        .current
-        ?.firstElementChild as HTMLInputElement
-    ) ?? (
       inputRef
         .current
         ?.getElementsByTagName('input')[0] as HTMLInputElement
@@ -137,7 +129,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>((
               )}
             </>
           }),
-          ref: args?.inputRef ?? inputRef,
+          ref: inputRef,
           className: `rounded-[inherit] ${args.InputProps?.className ?? new String()}`,
         }}
         inputProps={{

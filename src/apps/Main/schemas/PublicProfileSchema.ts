@@ -6,6 +6,9 @@ export const PublicProfileSchema = z.object({
       .string()
       .readonly()
   ),
+  photo: z.optional(
+    z.any()
+  ),
   email: z.optional(
     z.coerce
       .string()

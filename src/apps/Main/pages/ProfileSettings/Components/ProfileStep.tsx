@@ -1,5 +1,10 @@
 import * as z from 'zod';
-import { FC, } from 'react';
+import { format } from 'date-fns';
+import { 
+  FC, 
+  useEffect, 
+} from 'react';
+import { useRecoilValue, } from 'recoil';
 import { zodResolver, } from '@hookform/resolvers/zod';
 import { 
   useForm, 
@@ -16,12 +21,20 @@ import At from '@mui/icons-material/AlternateEmail';
 
 import { 
   Button,
+  MenuItem,
   TextField,
   Typography,
 } from '@theme/main';
 
 import Picture from '@Shared/Components/Picture';
 
+import { User } from '@contexts/shared/domain/models';
+import { 
+  GENDER_TYPE, 
+  IDENTIFICATION_TYPE, 
+} from '@contexts/shared/domain/value-objects';
+
+import { profileState, } from '@apps/Main/state/atoms';
 import { 
   PublicProfile, 
   PublicProfileSchema, 
@@ -37,12 +50,17 @@ import {
   CommonStepProps, 
 } from '..';
 
-import StepContainer from '../Components/StepContainer';
+import StepContainer from './StepContainer';
 
 const FormSchema = PublicProfileSchema
   .merge(PersonalInformationSchema);
 
 type Form = PublicProfile & PersonalInformation;
+
+type PictureAction = {
+  rawImage: any;
+  imageUrl: string;
+}
 
 type ProfileStepProps = object & CommonStepProps;
 
@@ -51,12 +69,16 @@ const ProfileStep: FC<ProfileStepProps> = ({
 }) => {
   const { t, } = useTranslation();
 
+  const profile = useRecoilValue<Partial<User>>(profileState);
+
   const {
     control,
     formState: {
       isValid,
       isValidating,
     },
+    reset,
+    setValue,
     handleSubmit,
   } = useForm<Form>({
     resolver: zodResolver(FormSchema),
@@ -66,31 +88,69 @@ const ProfileStep: FC<ProfileStepProps> = ({
 
   const onSubmit: SubmitHandler<Form> = (values) => {
     console.log(values);
-
+    
     onActionTriggered('step', PROFILE_STEP);
   };
+  
+  const handleProfilePictureChanged: (action: PictureAction) => void = (a) => {
+    const { rawImage, } = a;
+    setValue('photo', rawImage, { 
+      shouldValidate: true, 
+    });
+  };
+
+  useEffect(() => {
+    // TODO: CONVERT THIS TO BUILDER OR SOMETHING SCALABLE
+    reset({
+      ...profile,
+    });
+
+    return () => {};
+  }, [profile, reset,])
 
   return (
     <section className='w-full h-auto overflow-y-auto'>
       <div className='h-full p-6 flex flex-col gap-y-8'>
         <StepContainer
-          title={t('profileSettings.steps.0.publicProfile.subtitle')}
-          subtitle={t('profileSettings.steps.0.publicProfile.description')}>
+          title={t(`profileSettings.steps.${PROFILE_STEP}.publicProfile.subtitle`)}
+          subtitle={t(`profileSettings.steps.${PROFILE_STEP}.publicProfile.description`)}>
           <div className='grow h-full flex flex-col p-6 border border-juridica-gray-100 shadow-sm rounded-lg gap-y-8'>
-            <div className='pb-6 border-b border-b-juridica-gray-100'>
+            <div className='flex gap-x-6 pb-6 border-b border-b-juridica-gray-100'>
               <Picture 
                 isReadonly 
-                alt=''
+                file={{
+                  src: profile?.photo 
+                }}
+                alt={profile?.name ?? 'Profile photo'}
                 className='w-48 h-48'
                 icon={<Pen className='text-2xl text-juridica-50'/>}
-                action={(e) => console.log(e)} />
+                action={handleProfilePictureChanged} />
+              <div className='flex flex-col gap-y-1'>
+                <Typography
+                  variant='h2'
+                  className='text-xl font-primary font-bold capitalize text-juridica-gray-900'>
+                  {profile?.name}
+                </Typography>
+                <Typography
+                  variant='body1'
+                  className='text-lg font-primary-alt font-medium text-juridica-400'>
+                  {t(`common.personTypes.${profile?.personType}`)}
+                </Typography>
+              </div>
+              <div className='self-end ml-auto'>
+                <Typography
+                  variant='body1'
+                  className='text-sm font-bold text-juridica-gray-500'>
+                  {t('common.dates.lastUpdate', { date: format(profile?.updatedAt ? new Date(profile?.updatedAt) : new Date(), 'Pp') })}
+                </Typography>
+              </div>
             </div>
             <div className='grow w-full grid grid-cols-3 gap-x-6 pb-6 border-b'>
               <div className='flex flex-col self-start min-w-96 w-96 gap-y-2'>
                 <Typography
                   variant='h3'
                   className='text-base font-bold font-primary'>
-                  {t('profileSettings.steps.0.preferredUsername.title')}
+                  {t(`profileSettings.steps.${PROFILE_STEP}.preferredUsername.title`)}
                 </Typography>
               </div>
               <div className='col-span-2 grid grid-cols-2 gap-x-6 gap-y-4'>
@@ -98,66 +158,66 @@ const ProfileStep: FC<ProfileStepProps> = ({
                   <Controller
                     render={({ field, fieldState, }) => (
                       <TextField
-                      {...field}
-                      disabled
-                      clipboard
-                      variant='outlined'
-                      color='primary'
-                      InputProps={{
-                        startAdornment: <Numeric/>
-                      }}
-                      label={t('profileSettings.steps.0.id.label')}
-                      placeholder={t('profileSettings.steps.0.id.placeholder')}
-                      error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
-                      helperText={fieldState?.error && fieldState?.error?.message} 
-                      required={PublicProfileSchema.shape.id instanceof z.ZodOptional } />
-                    )} 
-                    control={control}
-                    name='id'
-                    defaultValue={''} />
+                        {...field}
+                        disabled
+                        clipboard
+                        variant='outlined'
+                        color='primary'
+                        InputProps={{
+                          startAdornment: <Numeric/>
+                        }}
+                        label={t(`profileSettings.steps.${PROFILE_STEP}.id.label`)}
+                        placeholder={t(`profileSettings.steps.${PROFILE_STEP}.id.placeholder`)}
+                        error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
+                        helperText={fieldState?.error && fieldState?.error?.message} 
+                        required={PublicProfileSchema.shape.id instanceof z.ZodOptional } />
+                      )} 
+                      control={control}
+                      name='id'
+                      defaultValue={profile?.id ?? ''} />
                 </div>
                 <div className='col-span-1'>
                   <Controller
                     render={({ field, fieldState, }) => (
                       <TextField
-                      {...field}
-                      disabled
-                      variant='outlined'
-                      color='primary'
-                      InputProps={{
-                        startAdornment: <At/>
-                      }}
-                      label={t('profileSettings.steps.0.email.label')}
-                      placeholder={t('profileSettings.steps.0.email.placeholder')}
-                      error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
-                      helperText={fieldState?.error && fieldState?.error?.message} 
-                      required={PublicProfileSchema.shape.email instanceof z.ZodOptional } />
-                    )} 
+                        {...field}
+                        disabled
+                        variant='outlined'
+                        color='primary'
+                        InputProps={{
+                          startAdornment: <At/>
+                        }}
+                        label={t(`profileSettings.steps.${PROFILE_STEP}.email.label`)}
+                        placeholder={t(`profileSettings.steps.${PROFILE_STEP}.email.placeholder`)}
+                        error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
+                        helperText={fieldState?.error && fieldState?.error?.message} 
+                        required={PublicProfileSchema.shape.email instanceof z.ZodOptional } />
+                      )} 
                     control={control}
                     name='email'
-                    defaultValue={''} />
+                    defaultValue={profile?.email ?? ''} />
                 </div>
                 <div className='col-span-1'>
                   <Controller
                     render={({ field, fieldState, }) => (
                       <TextField
-                      {...field}
-                      disabled
-                      clipboard
-                      variant='outlined'
-                      color='primary'
-                      InputProps={{
-                        startAdornment: <Person/>
-                      }}
-                      label={t('profileSettings.steps.0.preferredUsername.label')}
-                      placeholder={t('profileSettings.steps.0.preferredUsername.placeholder')}
-                      error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
-                      helperText={fieldState?.error && fieldState?.error?.message} 
-                      required={PublicProfileSchema.shape.preferredUsername instanceof z.ZodOptional } />
+                        {...field}
+                        disabled
+                        clipboard
+                        variant='outlined'
+                        color='primary'
+                        InputProps={{
+                          startAdornment: <Person/>
+                        }}
+                        label={t(`profileSettings.steps.${PROFILE_STEP}.preferredUsername.label`)}
+                        placeholder={t(`profileSettings.steps.${PROFILE_STEP}.preferredUsername.placeholder`)}
+                        error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
+                        helperText={fieldState?.error && fieldState?.error?.message} 
+                        required={PublicProfileSchema.shape.preferredUsername instanceof z.ZodOptional } />
                     )} 
                     control={control}
                     name='preferredUsername'
-                    defaultValue={''} />
+                    defaultValue={profile?.preferredUsername ?? ''} />
                 </div>
               </div>
             </div>
@@ -166,7 +226,7 @@ const ProfileStep: FC<ProfileStepProps> = ({
                 <Typography
                   variant='h3'
                   className='text-base font-bold font-primary'>
-                  {t('profileSettings.steps.0.fullName.title')}
+                  {t(`profileSettings.steps.${PROFILE_STEP}.fullName.title`)}
                 </Typography>
               </div>
               <div className='col-span-2 grid grid-cols-2 gap-x-6 gap-y-4'>
@@ -177,15 +237,15 @@ const ProfileStep: FC<ProfileStepProps> = ({
                       {...field}
                       variant='outlined'
                       color='primary'
-                      label={t('profileSettings.steps.0.givenName.label')}
-                      placeholder={t('profileSettings.steps.0.givenName.placeholder')}
+                      label={t(`profileSettings.steps.${PROFILE_STEP}.givenName.label`)}
+                      placeholder={t(`profileSettings.steps.${PROFILE_STEP}.givenName.placeholder`)}
                       error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                       helperText={fieldState?.error && fieldState?.error?.message} 
                       required={PublicProfileSchema.shape.givenName instanceof z.ZodOptional } />
                     )} 
                     control={control}
                     name='givenName'
-                    defaultValue={''} />
+                    defaultValue={profile?.givenName ?? ''} />
                 </div>
                 <div className='col-span-1'>
                   <Controller
@@ -194,8 +254,8 @@ const ProfileStep: FC<ProfileStepProps> = ({
                       {...field}
                       variant='outlined'
                       color='primary'
-                      label={t('profileSettings.steps.0.middleName.label')}
-                      placeholder={t('profileSettings.steps.0.middleName.placeholder')}
+                      label={t(`profileSettings.steps.${PROFILE_STEP}.middleName.label`)}
+                      placeholder={t(`profileSettings.steps.${PROFILE_STEP}.middleName.placeholder`)}
                       error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                       helperText={fieldState?.error && fieldState?.error?.message} 
                       required={PublicProfileSchema.shape.middleName instanceof z.ZodOptional } />
@@ -210,8 +270,8 @@ const ProfileStep: FC<ProfileStepProps> = ({
                       <TextField
                       {...field}
                       variant='outlined'
-                      label={t('profileSettings.steps.0.familyName.label')}
-                      placeholder={t('profileSettings.steps.0.familyName.placeholder')}
+                      label={t(`profileSettings.steps.${PROFILE_STEP}.familyName.label`)}
+                      placeholder={t(`profileSettings.steps.${PROFILE_STEP}.familyName.placeholder`)}
                       error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                       helperText={fieldState?.error && fieldState?.error?.message} 
                       required={PublicProfileSchema.shape.familyName instanceof z.ZodOptional } />
@@ -227,7 +287,7 @@ const ProfileStep: FC<ProfileStepProps> = ({
                 <Typography
                   variant='h3'
                   className='text-base font-bold font-primary'>
-                  {t('profileSettings.steps.0.biography.title')}
+                  {t(`profileSettings.steps.${PROFILE_STEP}.biography.title`)}
                 </Typography>
               </div>
               <div className='col-span-2 grid grid-cols-2 gap-x-6'>
@@ -243,8 +303,8 @@ const ProfileStep: FC<ProfileStepProps> = ({
                       }}
                       variant='outlined'
                       color='primary'
-                      label={t('profileSettings.steps.0.biography.label')}
-                      placeholder={t('profileSettings.steps.0.biography.placeholder')}
+                      label={t(`profileSettings.steps.${PROFILE_STEP}.biography.label`)}
+                      placeholder={t(`profileSettings.steps.${PROFILE_STEP}.biography.placeholder`)}
                       error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                       helperText={fieldState?.error && fieldState?.error?.message} 
                       required={PublicProfileSchema.shape.biography instanceof z.ZodOptional } />
@@ -260,7 +320,7 @@ const ProfileStep: FC<ProfileStepProps> = ({
                 <Typography
                   variant='h3'
                   className='text-base font-bold font-primary'>
-                  {t('profileSettings.steps.0.birthdate.title')}
+                  {t(`profileSettings.steps.${PROFILE_STEP}.birthdate.title`)}
                 </Typography>
               </div>
               <div className='col-span-2 grid grid-cols-2 gap-x-6'>
@@ -272,8 +332,8 @@ const ProfileStep: FC<ProfileStepProps> = ({
                       type='date'
                       variant='outlined'
                       color='primary'
-                      label={t('profileSettings.steps.0.birthdate.label')}
-                      placeholder={t('profileSettings.steps.0.birthdate.placeholder')}
+                      label={t(`profileSettings.steps.${PROFILE_STEP}.birthdate.label`)}
+                      placeholder={t(`profileSettings.steps.${PROFILE_STEP}.birthdate.placeholder`)}
                       error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                       helperText={fieldState?.error && fieldState?.error?.message} 
                       required={PublicProfileSchema.shape.birthdate instanceof z.ZodOptional } />
@@ -297,15 +357,15 @@ const ProfileStep: FC<ProfileStepProps> = ({
           </div>
         </StepContainer>
         <StepContainer
-          title={t('profileSettings.steps.0.personalInformation.subtitle')}
-          subtitle={t('profileSettings.steps.0.personalInformation.description')}>
+          title={t(`profileSettings.steps.${PROFILE_STEP}.personalInformation.subtitle`)}
+          subtitle={t(`profileSettings.steps.${PROFILE_STEP}.personalInformation.description`)}>
           <div className='grow h-full flex flex-col p-6 border border-juridica-gray-100 shadow-sm rounded-lg gap-y-8'>
             <div className='grow w-full grid grid-cols-3 gap-x-6 pb-6 border-b'>
               <div className='flex flex-col self-start min-w-96 w-96 gap-y-2'>
                 <Typography
                   variant='h3'
                   className='text-base font-bold font-primary'>
-                  {t('profileSettings.steps.0.identification.title')}
+                  {t(`profileSettings.steps.${PROFILE_STEP}.identification.title`)}
                 </Typography>
               </div>
               <div className='col-span-2 grid grid-cols-2 gap-x-6 gap-y-4'>
@@ -315,20 +375,27 @@ const ProfileStep: FC<ProfileStepProps> = ({
                       <TextField
                       {...field}
                       disabled
+                      select
                       variant='outlined'
                       color='primary'
                       InputProps={{
                         startAdornment: <Badge/>
                       }}
-                      label={t('profileSettings.steps.0.identification.identificationType.label')}
-                      placeholder={t('profileSettings.steps.0.identification.identificationType.placeholder')}
+                      label={t(`profileSettings.steps.${PROFILE_STEP}.identification.identificationType.label`)}
+                      placeholder={t(`profileSettings.steps.${PROFILE_STEP}.identification.identificationType.placeholder`)}
                       error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                       helperText={fieldState?.error && fieldState?.error?.message} 
-                      required={PersonalInformationSchema.shape.identificationType instanceof z.ZodOptional } />
+                      required={PersonalInformationSchema.shape.identificationType instanceof z.ZodOptional }>
+                        {Object.entries(IDENTIFICATION_TYPE).map(([key, value]) => (
+                          <MenuItem key={key} value={value.codeName}>
+                            {t(`common.identificationTypes.${key}`)}
+                          </MenuItem>
+                        ))}
+                      </TextField>
                     )} 
                     control={control}
                     name='identificationType'
-                    defaultValue={''} />
+                    defaultValue={profile?.profile?.identificationType?.codeName ?? 'CC'} />
                 </div>
                 <div className='col-span-1'>
                   <Controller
@@ -339,15 +406,15 @@ const ProfileStep: FC<ProfileStepProps> = ({
                       clipboard
                       variant='outlined'
                       color='primary'
-                      label={t('profileSettings.steps.0.identification.identificationNumber.label')}
-                      placeholder={t('profileSettings.steps.0.identification.identificationNumber.placeholder')}
+                      label={t(`profileSettings.steps.${PROFILE_STEP}.identification.identificationNumber.label`)}
+                      placeholder={t(`profileSettings.steps.${PROFILE_STEP}.identification.identificationNumber.placeholder`)}
                       error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                       helperText={fieldState?.error && fieldState?.error?.message} 
                       required={PersonalInformationSchema.shape.identificationNumber instanceof z.ZodOptional } />
                     )} 
                     control={control}
                     name='identificationNumber'
-                    defaultValue={''} />
+                    defaultValue={profile?.profile?.identificationNumber ?? ''} />
                 </div>
                 <div className='col-span-full'>
                   <Controller
@@ -358,15 +425,15 @@ const ProfileStep: FC<ProfileStepProps> = ({
                       type='date'
                       variant='outlined'
                       color='primary'
-                      label={t('profileSettings.steps.0.identification.identificationIssueDate.label')}
-                      placeholder={t('profileSettings.steps.0.identification.identificationIssueDate.placeholder')}
+                      label={t(`profileSettings.steps.${PROFILE_STEP}.identification.identificationIssueDate.label`)}
+                      placeholder={t(`profileSettings.steps.${PROFILE_STEP}.identification.identificationIssueDate.placeholder`)}
                       error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                       helperText={fieldState?.error && fieldState?.error?.message} 
                       required={PersonalInformationSchema.shape.identificationIssueDate instanceof z.ZodOptional } />
                     )} 
                     control={control}
                     name='identificationIssueDate'
-                    defaultValue={new Date()} />
+                    defaultValue={profile?.profile?.identificationIssueDate} />
                 </div>
               </div>
             </div>
@@ -375,7 +442,7 @@ const ProfileStep: FC<ProfileStepProps> = ({
                 <Typography
                   variant='h3'
                   className='text-base font-bold font-primary'>
-                  {t('profileSettings.steps.0.phone.title')}
+                  {t(`profileSettings.steps.${PROFILE_STEP}.phone.title`)}
                 </Typography>
               </div>
               <div className='col-span-2 grid grid-cols-3 gap-x-6 gap-y-4'>
@@ -386,15 +453,15 @@ const ProfileStep: FC<ProfileStepProps> = ({
                       {...field}
                       variant='outlined'
                       color='primary'
-                      label={t('profileSettings.steps.0.phone.phoneNumberPrefix.label')}
-                      placeholder={t('profileSettings.steps.0.phone.phoneNumberPrefix.placeholder')}
+                      label={t(`profileSettings.steps.${PROFILE_STEP}.phone.phoneNumberPrefix.label`)}
+                      placeholder={t(`profileSettings.steps.${PROFILE_STEP}.phone.phoneNumberPrefix.placeholder`)}
                       error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                       helperText={fieldState?.error && fieldState?.error?.message} 
                       required={PersonalInformationSchema.shape.phoneNumberPrefix instanceof z.ZodOptional } />
                     )} 
                     control={control}
                     name='phoneNumberPrefix'
-                    defaultValue={'+57'} />
+                    defaultValue={profile?.phoneNumberPrefix ?? ''} />
                 </div>
                 <div className='col-span-2'>
                   <Controller
@@ -403,27 +470,16 @@ const ProfileStep: FC<ProfileStepProps> = ({
                       {...field}
                       variant='outlined'
                       color='primary'
-                      label={t('profileSettings.steps.0.phone.phoneNumber.label')}
-                      placeholder={t('profileSettings.steps.0.phone.phoneNumber.placeholder')}
+                      label={t(`profileSettings.steps.${PROFILE_STEP}.phone.phoneNumber.label`)}
+                      placeholder={t(`profileSettings.steps.${PROFILE_STEP}.phone.phoneNumber.placeholder`)}
                       error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                       helperText={fieldState?.error && fieldState?.error?.message} 
                       required={PersonalInformationSchema.shape.phoneNumber instanceof z.ZodOptional } />
                     )} 
                     control={control}
                     name='phoneNumber'
-                    defaultValue={''} />
+                    defaultValue={profile?.phoneNumber ?? ''} />
                 </div>
-              </div>
-            </div>
-            {/* <div className='grow w-full grid grid-cols-3 gap-x-6 pb-6 border-b'>
-              <div className='flex flex-col self-start min-w-96 w-96 gap-y-2'>
-                <Typography
-                  variant='h3'
-                  className='text-base font-bold font-primary'>
-                  {t('profileSettings.steps.0.biography.title')}
-                </Typography>
-              </div>
-              <div className='col-span-2 grid grid-cols-2 gap-x-6'>
               </div>
             </div>
             <div className='grow w-full grid grid-cols-3 gap-x-6 pb-6 border-b'>
@@ -431,12 +487,36 @@ const ProfileStep: FC<ProfileStepProps> = ({
                 <Typography
                   variant='h3'
                   className='text-base font-bold font-primary'>
-                  {t('profileSettings.steps.0.birthdate.title')}
+                  {t(`profileSettings.steps.${PROFILE_STEP}.gender.title`)}
                 </Typography>
               </div>
-              <div className='col-span-2 grid grid-cols-2 gap-x-6'>
+              <div className='col-span-2 grid grid-cols-3 gap-x-6 gap-y-4'>
+                <div className='col-span-1'>
+                  <Controller
+                    render={({ field, fieldState, }) => (
+                      <TextField
+                      {...field}
+                      select
+                      variant='outlined'
+                      color='primary'
+                      label={t(`profileSettings.steps.${PROFILE_STEP}.gender.label`)}
+                      placeholder={t(`profileSettings.steps.${PROFILE_STEP}.gender.placeholder`)}
+                      error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
+                      helperText={fieldState?.error && fieldState?.error?.message} 
+                      required={PersonalInformationSchema.shape.phoneNumberPrefix instanceof z.ZodOptional }>
+                        {Object.entries(GENDER_TYPE).map(([key, value]) => (
+                          <MenuItem key={key} value={value}>
+                            {t(`common.genderTypes.${key.toLowerCase()}`)}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    )} 
+                    control={control}
+                    name='gender'
+                    defaultValue={profile?.profile?.gender ?? ''} />
+                </div>
               </div>
-            </div> */}
+            </div>
             <div className='mt-2'>
               <Button
                 loading={isValidating}

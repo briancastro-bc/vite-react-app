@@ -7,10 +7,10 @@ export interface Profile {
   nickname?: string;
   biography?: string;
   identificationNumber: string;
-  identificationType: IdentificationType;
-  identificationIssueDate: Date;
+  identificationType?: IdentificationType;
+  identificationIssueDate?: Date;
   profile?: string;
   gender?: GenderType;
   birthdate?: Date;
-  digitalRecord?: File[];
+  digitalRecord?: File[] | null;
 }

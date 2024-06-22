@@ -14,6 +14,8 @@ export const ADDRESS_STEP = 3;
 
 export const BILLING_STEP = 4;
 
+export const AGENT_STEP = 5;
+
 export type ActionType = (typeof ACTION_TYPE)[keyof typeof ACTION_TYPE];
 
 export type CommonStepProps = {

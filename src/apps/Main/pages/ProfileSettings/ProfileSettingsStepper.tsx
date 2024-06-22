@@ -12,13 +12,14 @@ type ProfileSettingsStepperProps = object & ComponentProps<'div'> & {
 const ProfileSettingsStepper: FC<ProfileSettingsStepperProps> = ({
   children,
   currentStep = 0,
+  ...args
 }) => {
   const steps = Children.toArray(children);
 
   return (
-    <>
+    <div {...args}>
       {steps?.length > 0 ? steps[currentStep] : steps[0]}
-    </>
+    </div>
   );
 };
 

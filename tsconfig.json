@@ -15,6 +15,12 @@
       "@contexts/*": ["./src/contexts/*", "./src/apps/Shared/contexts/*"],
       "@theme/*": ["./src/apps/Shared/Theme/*"],
     },
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "types": [
+      "reflect-metadata"
+    ],
+
 
     /* Bundler mode */
     "moduleResolution": "bundler",

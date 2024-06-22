@@ -15,8 +15,8 @@ export default defineConfig(() => {
         '@ioc': resolve(import.meta.dirname, 'src/ioc'),
         '@apps': resolve(import.meta.dirname, 'src/apps'),
         '@assets': resolve(import.meta.dirname, 'src/assets'),
+        '@contexts': resolve(import.meta.dirname, 'src/contexts'),
         '@Shared': resolve(import.meta.dirname, 'src/apps/Shared'),
-        '@contexts': resolve(import.meta.dirname, 'src/contexts', 'src/apps/Shared/contexts'),
         '@theme': resolve(import.meta.dirname, 'src/apps/Shared/Theme'),
       }
     }

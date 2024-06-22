@@ -1,8 +1,13 @@
 import * as z from 'zod';
 import {
   FC,
+  useState,
+  useEffect,
+  useCallback,
 } from 'react';
+import { useRecoilState, } from 'recoil';
 import { useTranslation, } from 'react-i18next';
+import { useService, } from '@redtea/react-inversify';
 import { zodResolver, } from '@hookform/resolvers/zod';
 import { useForm, Controller, SubmitHandler, } from 'react-hook-form';
 
@@ -15,6 +20,10 @@ import {
   Typography,
 } from '@theme/main';
 
+import { User, } from '@contexts/shared/domain/models';
+import { UserAddressPort, } from '@contexts/user/application/ports/UserAddressPort';
+
+import { profileState, } from '@apps/Main/state/atoms';
 import {
   Address,
   AddressSchema,
@@ -25,7 +34,7 @@ import {
   CommonStepProps, 
 } from '..';
 
-import StepContainer from '../Components/StepContainer';
+import StepContainer from './StepContainer';
 
 type AddressStepProps = object & CommonStepProps;
 
@@ -34,12 +43,19 @@ const AddressStep: FC<AddressStepProps> = ({
 }) => {
   const { t, } = useTranslation();
 
+  const [loading, setLoading,] = useState<boolean>(false);
+
+  const userAddressUseCase = useService<UserAddressPort>('UserAddressUseCase');
+
+  const [profile, setProfile,] = useRecoilState<Partial<User>>(profileState);
+
   const {
     control,
     formState: {
       isValid,
       isValidating,
     },
+    reset,
     handleSubmit,
   } = useForm<Address>({
     resolver: zodResolver(AddressSchema),
@@ -52,6 +68,38 @@ const AddressStep: FC<AddressStepProps> = ({
     
     onActionTriggered('step', ADDRESS_STEP);
   };
+
+  const getUserAddress = useCallback(async () => {
+    const address = await userAddressUseCase.getAddress();
+    if ('error' in address && 'success' in address && (!address.success || address.error)) {
+      throw new Error(address.error!)
+    }
+
+    return { ...address,};
+  }, [userAddressUseCase,])
+
+  useEffect(() => {
+    let isSubscribed = true;
+    setLoading(true);
+
+    if (isSubscribed)
+      getUserAddress()
+        .then((data) => {
+          setProfile((previousState) => ({
+            ...previousState,
+            ...data,
+          }));
+          reset({
+            ...data.address,
+          });
+        })
+        .catch((err) => { throw err; })
+        .finally(() => setLoading(false));
+
+    return () => {
+      isSubscribed = false;
+    };
+  }, [getUserAddress,])
 
   return (
     <section className='w-full h-auto overflow-y-auto'>
@@ -94,7 +142,7 @@ const AddressStep: FC<AddressStepProps> = ({
                     )}
                     control={control}
                     name='formatted'
-                    defaultValue={''} />
+                    defaultValue={`${profile?.address?.country}` ?? ''} />
                 </div>
               </div>
             </div>
@@ -117,7 +165,7 @@ const AddressStep: FC<AddressStepProps> = ({
                     render={({ field, fieldState, }) => (
                       <TextField
                         {...field}
-                        select
+                        // select
                         SelectProps={{
                           className: 'font-primary-alt text-sm'
                         }}
@@ -129,21 +177,21 @@ const AddressStep: FC<AddressStepProps> = ({
                         error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                         helperText={fieldState?.error && fieldState?.error?.message}
                         required={AddressSchema.shape.country instanceof z.ZodOptional}>
-                          <MenuItem className='font-primary-alt text-[15px]'>
+                          {/* <MenuItem className='font-primary-alt text-[15px]'>
                             
-                          </MenuItem>
+                          </MenuItem> */}
                         </TextField>
                     )}
                     control={control}
                     name='country'
-                    defaultValue={''} />
+                    defaultValue={profile?.address?.country ?? ''} />
                 </div>
                 <div className='col-span-1'>
                   <Controller
                     render={({ field, fieldState, }) => (
                       <TextField
                         {...field}
-                        select
+                        // select
                         SelectProps={{
                           className: 'font-primary-alt text-sm'
                         }}
@@ -155,21 +203,21 @@ const AddressStep: FC<AddressStepProps> = ({
                         error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                         helperText={fieldState?.error && fieldState?.error?.message}
                         required={AddressSchema.shape.region instanceof z.ZodOptional}>
-                          <MenuItem className='font-primary-alt text-[15px]'>
+                          {/* <MenuItem className='font-primary-alt text-[15px]'>
                             
-                          </MenuItem>
+                          </MenuItem> */}
                         </TextField>
                     )}
                     control={control}
                     name='region'
-                    defaultValue={''} />
+                    defaultValue={profile?.address?.region ?? ''} />
                 </div>
                 <div className='col-span-1'>
                   <Controller
                     render={({ field, fieldState, }) => (
                       <TextField
                         {...field}
-                        select
+                        // select
                         SelectProps={{
                           className: 'font-primary-alt text-sm'
                         }}
@@ -181,14 +229,14 @@ const AddressStep: FC<AddressStepProps> = ({
                         error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                         helperText={fieldState?.error && fieldState?.error?.message}
                         required={AddressSchema.shape.locality instanceof z.ZodOptional}>
-                          <MenuItem className='font-primary-alt text-[15px]'>
+                          {/* <MenuItem className='font-primary-alt text-[15px]'>
                             
-                          </MenuItem>
+                          </MenuItem> */}
                         </TextField>
                     )}
                     control={control}
                     name='locality'
-                    defaultValue={''} />
+                    defaultValue={profile?.address?.locality ?? ''} />
                 </div>
               </div>
             </div>
@@ -222,7 +270,7 @@ const AddressStep: FC<AddressStepProps> = ({
                     )}
                     control={control}
                     name='street'
-                    defaultValue={''} />
+                    defaultValue={profile?.address?.street ?? ''} />
                 </div>
                 <div className='col-span-1'>
                   <Controller
@@ -240,7 +288,7 @@ const AddressStep: FC<AddressStepProps> = ({
                     )}
                     control={control}
                     name='streetComplement'
-                    defaultValue={''} />
+                    defaultValue={profile?.address?.streetComplement ?? ''} />
                 </div>
               </div>
             </div>
@@ -274,14 +322,14 @@ const AddressStep: FC<AddressStepProps> = ({
                     )}
                     control={control}
                     name='postalCode'
-                    defaultValue={''} />
+                    defaultValue={profile?.address?.postalCode ?? ''} />
                 </div>
               </div>
             </div>
             <div className='mt-2'>
               <Button
-                loading={isValidating}
-                disabled={!isValid}
+                loading={isValidating || loading}
+                disabled={!isValid || loading}
                 size='large'
                 variant='contained'
                 onClick={handleSubmit(onSubmit)}>

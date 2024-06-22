@@ -4,13 +4,11 @@ export const PreferencesSchema = z.object({
   locale: z.optional(
     z.coerce
       .string()
-      .readonly(),
-  ),
+  ).readonly(),
   zoneinfo: z.optional(
     z.coerce
       .string()
-      .readonly(),
-  ),
+  ).readonly(),
   language: z.optional(
     z.coerce
       .string(),

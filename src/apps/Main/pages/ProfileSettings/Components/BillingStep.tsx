@@ -5,7 +5,7 @@ import { useTranslation, } from 'react-i18next';
 
 import { CommonStepProps, } from '..';
 
-import StepContainer from '../Components/StepContainer';
+import StepContainer from './StepContainer';
 
 type BillingStepProps = object & CommonStepProps;
 
