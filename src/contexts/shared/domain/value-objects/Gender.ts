@@ -1,7 +1,13 @@
 export const GENDER_TYPE = {
-  MALE: 'M',
-  FEMALE: 'F',
-  NOT_SPECIFIED: 'NS',
+  MALE: {
+    codeName: 'M',
+  },
+  FEMALE: {
+    codeName: 'F'
+  },
+  NOT_SPECIFIED: {
+    codeName: 'NS'
+  },
 } as const;
 
 export type GenderType = (typeof GENDER_TYPE)[keyof typeof GENDER_TYPE];

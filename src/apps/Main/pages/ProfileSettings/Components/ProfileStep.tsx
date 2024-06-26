@@ -2,7 +2,8 @@ import * as z from 'zod';
 import { format } from 'date-fns';
 import { 
   FC, 
-  useEffect, 
+  useState, 
+  useEffect,
 } from 'react';
 import { useRecoilValue, } from 'recoil';
 import { zodResolver, } from '@hookform/resolvers/zod';
@@ -12,6 +13,7 @@ import {
   SubmitHandler, 
 } from 'react-hook-form';
 import { useTranslation, } from 'react-i18next';
+import { useService, } from '@redtea/react-inversify';
 
 import Pen from '@mui/icons-material/Edit';
 import Badge from '@mui/icons-material/Badge';
@@ -24,6 +26,7 @@ import {
   MenuItem,
   TextField,
   Typography,
+  DatePicker,
 } from '@theme/main';
 
 import Picture from '@Shared/Components/Picture';
@@ -31,8 +34,10 @@ import Picture from '@Shared/Components/Picture';
 import { User } from '@contexts/shared/domain/models';
 import { 
   GENDER_TYPE, 
+  GenderType, 
   IDENTIFICATION_TYPE, 
 } from '@contexts/shared/domain/value-objects';
+import { UpdateAccountPort, } from '@contexts/user/application/ports/UpdateAccountPort';
 
 import { profileState, } from '@apps/Main/state/atoms';
 import { 
@@ -69,7 +74,11 @@ const ProfileStep: FC<ProfileStepProps> = ({
 }) => {
   const { t, } = useTranslation();
 
+  const [loading, setLoading,] = useState<boolean>(false);
+
   const profile = useRecoilValue<Partial<User>>(profileState);
+
+  const updateAccountUseCase = useService<UpdateAccountPort>('UpdateAccountUseCase');
 
   const {
     control,
@@ -77,6 +86,7 @@ const ProfileStep: FC<ProfileStepProps> = ({
       isValid,
       isValidating,
     },
+    watch,
     reset,
     setValue,
     handleSubmit,
@@ -86,9 +96,13 @@ const ProfileStep: FC<ProfileStepProps> = ({
     reValidateMode: 'onChange',
   });
 
-  const onSubmit: SubmitHandler<Form> = (values) => {
-    console.log(values);
+  const onSubmit: SubmitHandler<Form> = async (values) => {
+    setLoading(true);
+    await updateAccountUseCase.updateUserData({
+      ...values,
+    });
     
+    setLoading(false);
     onActionTriggered('step', PROFILE_STEP);
   };
   
@@ -262,7 +276,7 @@ const ProfileStep: FC<ProfileStepProps> = ({
                     )} 
                     control={control}
                     name='middleName'
-                    defaultValue={''} />
+                    defaultValue={profile?.middleName ?? ''} />
                 </div>
                 <div className='col-span-2'>
                   <Controller
@@ -278,7 +292,7 @@ const ProfileStep: FC<ProfileStepProps> = ({
                     )} 
                     control={control}
                     name='familyName'
-                    defaultValue={''} />
+                    defaultValue={profile?.familyName ?? ''} />
                 </div>
               </div>
             </div>
@@ -311,7 +325,7 @@ const ProfileStep: FC<ProfileStepProps> = ({
                     )} 
                     control={control}
                     name='biography'
-                    defaultValue={''} />
+                    defaultValue={profile?.biography ?? ''} />
                 </div>
               </div>
             </div>
@@ -325,22 +339,20 @@ const ProfileStep: FC<ProfileStepProps> = ({
               </div>
               <div className='col-span-2 grid grid-cols-2 gap-x-6'>
                 <div className='col-span-2'>
-                  <Controller
+                  <Controller 
                     render={({ field, fieldState, }) => (
-                      <TextField
-                      {...field}
-                      type='date'
-                      variant='outlined'
-                      color='primary'
-                      label={t(`profileSettings.steps.${PROFILE_STEP}.birthdate.label`)}
-                      placeholder={t(`profileSettings.steps.${PROFILE_STEP}.birthdate.placeholder`)}
-                      error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
-                      helperText={fieldState?.error && fieldState?.error?.message} 
-                      required={PublicProfileSchema.shape.birthdate instanceof z.ZodOptional } />
-                    )} 
+                      <DatePicker 
+                        {...field}
+                        disabled
+                        slotProps={{
+                          textField: {
+                            error: fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched),
+                          }
+                        }} />
+                    )}
                     control={control}
                     name='birthdate'
-                    defaultValue={new Date()} />
+                    defaultValue={new Date(profile?.birthdate)} />
                 </div>
               </div>
             </div>
@@ -395,7 +407,7 @@ const ProfileStep: FC<ProfileStepProps> = ({
                     )} 
                     control={control}
                     name='identificationType'
-                    defaultValue={profile?.profile?.identificationType?.codeName ?? 'CC'} />
+                    defaultValue={profile?.identificationType?.codeName ?? 'CC'} />
                 </div>
                 <div className='col-span-1'>
                   <Controller
@@ -414,26 +426,24 @@ const ProfileStep: FC<ProfileStepProps> = ({
                     )} 
                     control={control}
                     name='identificationNumber'
-                    defaultValue={profile?.profile?.identificationNumber ?? ''} />
+                    defaultValue={profile?.identificationNumber ?? ''} />
                 </div>
                 <div className='col-span-full'>
-                  <Controller
+                  <Controller 
                     render={({ field, fieldState, }) => (
-                      <TextField
-                      {...field}
-                      disabled
-                      type='date'
-                      variant='outlined'
-                      color='primary'
-                      label={t(`profileSettings.steps.${PROFILE_STEP}.identification.identificationIssueDate.label`)}
-                      placeholder={t(`profileSettings.steps.${PROFILE_STEP}.identification.identificationIssueDate.placeholder`)}
-                      error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
-                      helperText={fieldState?.error && fieldState?.error?.message} 
-                      required={PersonalInformationSchema.shape.identificationIssueDate instanceof z.ZodOptional } />
-                    )} 
+                      <DatePicker 
+                        {...field}
+                        label={t(`profileSettings.steps.${PROFILE_STEP}.identification.identificationIssueDate.label`)}
+                        disabled
+                        slotProps={{
+                          textField: {
+                            error: fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched),
+                          }
+                        }} />
+                    )}
                     control={control}
                     name='identificationIssueDate'
-                    defaultValue={profile?.profile?.identificationIssueDate} />
+                    defaultValue={new Date(profile?.identificationIssueDate)} />
                 </div>
               </div>
             </div>
@@ -505,22 +515,22 @@ const ProfileStep: FC<ProfileStepProps> = ({
                       helperText={fieldState?.error && fieldState?.error?.message} 
                       required={PersonalInformationSchema.shape.phoneNumberPrefix instanceof z.ZodOptional }>
                         {Object.entries(GENDER_TYPE).map(([key, value]) => (
-                          <MenuItem key={key} value={value}>
-                            {t(`common.genderTypes.${key.toLowerCase()}`)}
+                          <MenuItem key={key} value={value.codeName}>
+                            {t(`common.genderTypes.${value.codeName}`)}
                           </MenuItem>
                         ))}
                       </TextField>
                     )} 
                     control={control}
                     name='gender'
-                    defaultValue={profile?.profile?.gender ?? ''} />
+                    defaultValue={profile?.gender ?? GENDER_TYPE.MALE.codeName} />
                 </div>
               </div>
             </div>
             <div className='mt-2'>
               <Button
-                loading={isValidating}
-                disabled={!isValid}
+                loading={isValidating || loading}
+                disabled={!isValid || loading}
                 size='large'
                 variant='contained'
                 onClick={handleSubmit(onSubmit)}>

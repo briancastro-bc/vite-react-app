@@ -40,8 +40,6 @@ export class UserAccountUseCase implements UserAccountPort {
       };
     }
 
-    console.log('profile data', profile);
-
     const userData = {
       ...personalData,
       ...account,

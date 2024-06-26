@@ -28,9 +28,9 @@
         "natural": "Persona Natural"
       },
       "genderTypes": {
-        "male": "\u00c9l",
-        "female": "Ella",
-        "not_specified": "Indeterminado"
+        "M": "\u00c9l",
+        "F": "Ella",
+        "NS": "No quiero especificarlo"
       },
       "identificationTypes": {
         "CC": "C\u00e9dula de Ciudadan\u00eda",
@@ -113,7 +113,7 @@
           "biography": {
             "title": "Biograf\u00eda",
             "label": "Acerca de ti",
-            "placeholder": ""
+            "placeholder": "Tus logros profesionales, enfoques, etc."
           },
           "birthdate": {
             "title": "Fecha de nacimiento",
@@ -131,7 +131,7 @@
               "placeholder": ""
             },
             "identificationIssueDate": {
-              "label": "Fecha de expedici\u00f3n",
+              "label": "Fecha de expedici\u00f3n del documento",
               "placeholder": ""
             }
           },

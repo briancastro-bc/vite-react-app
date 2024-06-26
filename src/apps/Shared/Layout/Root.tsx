@@ -2,10 +2,6 @@ import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 import { SnackbarProvider, } from 'notistack';
 
-// import {
-//   Snackbar,
-// } from '@theme/main';
-
 import Chat from '@apps/Main/pages/Chat/Chat';
 
 const SNACKBAR_DURATION_IN_MS = 10000;

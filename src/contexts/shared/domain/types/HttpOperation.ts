@@ -1,4 +1,4 @@
-export interface HttpResponse<T> {
+export interface HttpOperation<T> {
   success: boolean;
 	statusCode: number;
 	timestamp: string;

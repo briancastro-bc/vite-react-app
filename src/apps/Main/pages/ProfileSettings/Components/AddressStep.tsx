@@ -20,7 +20,12 @@ import {
   Typography,
 } from '@theme/main';
 
-import { User, } from '@contexts/shared/domain/models';
+import { 
+  User, 
+  Region,
+  Country, 
+} from '@contexts/shared/domain/models';
+import { DatabaseService } from '@contexts/shared/domain/services/DatabaseService';
 import { UserAddressPort, } from '@contexts/user/application/ports/UserAddressPort';
 
 import { profileState, } from '@apps/Main/state/atoms';
@@ -44,7 +49,10 @@ const AddressStep: FC<AddressStepProps> = ({
   const { t, } = useTranslation();
 
   const [loading, setLoading,] = useState<boolean>(false);
+  const [regions, setRegions,] = useState<Array<Region>>([]);
+  const [countries, setCountries,] = useState<Array<Country>>([]);
 
+  const databaseService = useService<DatabaseService>('IndexedDatabaseService');
   const userAddressUseCase = useService<UserAddressPort>('UserAddressUseCase');
 
   const [profile, setProfile,] = useRecoilState<Partial<User>>(profileState);
@@ -55,6 +63,7 @@ const AddressStep: FC<AddressStepProps> = ({
       isValid,
       isValidating,
     },
+    watch,
     reset,
     handleSubmit,
   } = useForm<Address>({
@@ -100,6 +109,36 @@ const AddressStep: FC<AddressStepProps> = ({
       isSubscribed = false;
     };
   }, [getUserAddress,])
+
+  const getLocationPicklists: () => Promise<[Array<Country>, Array<Region>]> = useCallback(async () => {
+    const picklists = await Promise.all([
+      databaseService.get('countries'),
+      databaseService.get('regions'),
+    ]);
+
+    const [ countries, regions, ] = picklists;
+
+    return [ 
+      countries?.payload as Array<Country>, 
+      regions?.payload as Array<Region>, 
+    ];
+  }, [databaseService,]);
+
+  useEffect(() => {
+    let isSubscribed = true;
+
+    if (isSubscribed)
+      getLocationPicklists()
+        .then(([ countries, regions ]) => {
+          setCountries(countries);
+          setRegions(regions);
+        })
+        .catch((err) => { throw err; });
+
+    return () => {
+      isSubscribed = false;
+    };
+  }, [getLocationPicklists,]);
 
   return (
     <section className='w-full h-auto overflow-y-auto'>
@@ -165,7 +204,7 @@ const AddressStep: FC<AddressStepProps> = ({
                     render={({ field, fieldState, }) => (
                       <TextField
                         {...field}
-                        // select
+                        select
                         SelectProps={{
                           className: 'font-primary-alt text-sm'
                         }}
@@ -177,9 +216,12 @@ const AddressStep: FC<AddressStepProps> = ({
                         error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                         helperText={fieldState?.error && fieldState?.error?.message}
                         required={AddressSchema.shape.country instanceof z.ZodOptional}>
-                          {/* <MenuItem className='font-primary-alt text-[15px]'>
-                            
-                          </MenuItem> */}
+                          {countries && countries?.length > 0 && countries?.map(country => (
+                            <MenuItem key={country.name} value={country.name.toLowerCase()} className='font-primary-alt text-sm flex items-center gap-x-4'>
+                              <i>{country.flagIcon}</i>
+                              {country.name}
+                            </MenuItem>
+                          ))}
                         </TextField>
                     )}
                     control={control}
@@ -191,7 +233,7 @@ const AddressStep: FC<AddressStepProps> = ({
                     render={({ field, fieldState, }) => (
                       <TextField
                         {...field}
-                        // select
+                        select
                         SelectProps={{
                           className: 'font-primary-alt text-sm'
                         }}
@@ -203,9 +245,21 @@ const AddressStep: FC<AddressStepProps> = ({
                         error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
                         helperText={fieldState?.error && fieldState?.error?.message}
                         required={AddressSchema.shape.region instanceof z.ZodOptional}>
-                          {/* <MenuItem className='font-primary-alt text-[15px]'>
-                            
-                          </MenuItem> */}
+                          {regions 
+                            && regions?.length > 0 
+                            && regions
+                              ?.filter(
+                                (region) => region.countryId === countries
+                                  .find(
+                                    (c) => c.name.toLowerCase() === watch('country')
+                                  )?.isoAlpha3
+                              ) 
+                            && regions.map((region) => (
+                              <MenuItem key={region.name} value={region.name.toLowerCase()} className='font-primary-alt text-sm flex items-center gap-x-4'>
+                                {region.name}
+                                {profile?.address?.region === region?.name?.toLowerCase()}
+                              </MenuItem>
+                            ))}
                         </TextField>
                     )}
                     control={control}

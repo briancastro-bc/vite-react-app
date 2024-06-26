@@ -9,7 +9,7 @@ import { Company, } from './CompanyModel';
 import { Profile, } from './ProfileModel';
 import { Permission, } from './PermissionModel';
 
-export interface User {
+export interface User extends Record<string, any> {
   id?: string;
   email?: string;
   password?: string | null;

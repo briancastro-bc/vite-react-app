@@ -103,6 +103,21 @@ export class HttpUserRepository implements UserRepository {
     throw new Error('Method not implemented.');
   }
 
+  async update(user: User): Promise<SuccessfullyOperation | UnsuccessfullyOperation> {
+    try {
+      const response = await this.http
+        .put<SuccessfullyOperation>('/api/v1/users/personal-data', user);
+      if (!response.success || response.error) return { ...response, };
+
+      return { ...response, };
+    } catch {
+      return {
+        success: false,
+        error: 'Something went wrong',
+      };
+    }
+  }
+
   async sendEmailVerificationCode(): Promise<SuccessfullyOperation | UnsuccessfullyOperation> {
     try {
       const response = await this.http

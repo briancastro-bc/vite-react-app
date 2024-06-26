@@ -1,11 +1,11 @@
 import { inject, injectable, } from '@ioc/inversify';
 
-import { HttpResponse, } from '@contexts/shared/domain/models';
+import { HttpOperation, } from '@contexts/shared/domain/types';
 import { HttpRepository, } from '@contexts/shared/domain/repositories';
 
 @injectable()
 export class FetchHttpRepository implements HttpRepository {
-  private readonly authorization = 'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..Lu86R8YsDIa6wY4I7UHJEA.pkdr7Qxvez3FvqG3AmBV1J7_BJSYv_2Nd00o0o3K59lEtgQINiNSII_oZpbpWLebCrXxKluX4PRvaU73pI4YVVx24MxnEw8_kAKyTXUSPz5rLHgv80wz9eWUvnC6EaW40pXQ5mwWQeUbatIHUJt6y9I7RpAUC3hzwue8AZlYlb7sLRQrUpODVcE1IJLaP2g5mBql62m8my4SkX2hf0Q8mkXC1CqhAU-KMDvJA7ONPyDiCXlH2MXGFKuHJTZ-8Mfu.HdLP9r7xrJE0BIzHFCOuDw8Rqhfd8a9CzvdBBOuuQ7A';
+  private readonly authorization = 'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..qrus7tAAGWEnA_JPrmmiRA.WbXTKz0RP1npTntBn5hG_eKCThEICC2mAx4XCKQNx5hMhYgL6f3uNq3a1LVgQqRODvvz4zGLLBVKq22eTid4tpDfO0-79-Jc9WCd0J4uztRu9MDvN8kLApnNPliuZcWavV0WlHRjihs3d-XdCPtFBs3WfQGi4tgJXpzb6-PcWC5NidzSBs_eNgUJGGIOD8Ic0NL9kgcZh4eIMnr9Ng1HJopQHyp__GF8dgQzXs7wSmGPSQe47sQsEkXn0iScZIq3.JMXFmQVwN7HOjRQMyL_Q7AwhO8DsM04xTCqcQkH7i6w'
 
   constructor(
     @inject('BACKEND_URL') private readonly BACKEND_URL: string
@@ -14,7 +14,7 @@ export class FetchHttpRepository implements HttpRepository {
   async get<T>(
     url: string, 
     params?: Record<string, any>
-  ): Promise<HttpResponse<T>> {
+  ): Promise<HttpOperation<T>> {
     const endpoint = new URL(url, this.BACKEND_URL);
 
     const response = await fetch(endpoint, {
@@ -35,7 +35,7 @@ export class FetchHttpRepository implements HttpRepository {
       mode: 'cors',
     });
 
-    const data = await response.json() as HttpResponse<T>;
+    const data = await response.json() as HttpOperation<T>;
     return data;
   }
 
@@ -43,7 +43,7 @@ export class FetchHttpRepository implements HttpRepository {
     url: string, 
     body: Record<string, any>, 
     params?: Record<string, any>,
-  ): Promise<HttpResponse<T>> {
+  ): Promise<HttpOperation<T>> {
     const endpoint = new URL(url, this.BACKEND_URL);
 
     const response = await fetch(endpoint, {
@@ -67,7 +67,7 @@ export class FetchHttpRepository implements HttpRepository {
       }),
     });
 
-    const data = await response.json() as HttpResponse<T>;
+    const data = await response.json() as HttpOperation<T>;
     return data;
   }
 
@@ -75,7 +75,7 @@ export class FetchHttpRepository implements HttpRepository {
     url: string, 
     body: Record<string, any>, 
     params?: Record<string, any>,
-  ): Promise<HttpResponse<T>> {
+  ): Promise<HttpOperation<T>> {
     const endpoint = new URL(url, this.BACKEND_URL);
 
     const response = await fetch(endpoint, {
@@ -99,7 +99,7 @@ export class FetchHttpRepository implements HttpRepository {
       }),
     });
 
-    const data = await response.json() as HttpResponse<T>;
+    const data = await response.json() as HttpOperation<T>;
     return data;
   }
   
@@ -107,7 +107,7 @@ export class FetchHttpRepository implements HttpRepository {
     url: string, 
     body: Record<string, any>, 
     params?: Record<string, any>,
-  ): Promise<HttpResponse<T>> {
+  ): Promise<HttpOperation<T>> {
     const endpoint = new URL(url, this.BACKEND_URL);
 
     const response = await fetch(endpoint, {
@@ -131,14 +131,14 @@ export class FetchHttpRepository implements HttpRepository {
       }),
     });
 
-    const data = await response.json() as HttpResponse<T>;
+    const data = await response.json() as HttpOperation<T>;
     return data;
   }
 
   async delete<T>(
     url: string, 
     params?: Record<string, any>,
-  ): Promise<HttpResponse<T>> {
+  ): Promise<HttpOperation<T>> {
     const endpoint = new URL(url, this.BACKEND_URL);
 
     const response = await fetch(endpoint, {
@@ -159,11 +159,11 @@ export class FetchHttpRepository implements HttpRepository {
       mode: 'cors',
     });
 
-    const data = await response.json() as HttpResponse<T>;
+    const data = await response.json() as HttpOperation<T>;
     return data;
   }
 
-  async options<T = unknown>(): Promise<HttpResponse<T>> {
+  async options<T = unknown>(): Promise<HttpOperation<T>> {
     throw new Error('Method not implemented.');
   }
 }

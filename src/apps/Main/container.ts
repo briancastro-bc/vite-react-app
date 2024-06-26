@@ -7,7 +7,9 @@ import {
 
 import { UserAccountUseCase,  } from '@contexts/user/application/UserAccountUseCase';
 import { UserAddressUseCase,  } from '@contexts/user/application/UserAddressUseCase';
+import { UpdateAccountUseCase, } from '@contexts/user/application/UpdateAccountUseCase';
 import { AccountSecurityUseCase,  } from '@contexts/user/application/AccountSecurityUseCase';
+import { CountriesPhonePrefixesUseCase } from '@contexts/user/application/CountriesPhonePrefixesUseCase';
 
 import { HttpUserRepository, } from '@contexts/user/infrastructure/HttpUserRepository';
 
@@ -31,7 +33,17 @@ const dependencies: Array<Injectable> = [
     id: AccountSecurityUseCase.name,
     class: AccountSecurityUseCase,
     type: 'class',
-  }
+  },
+  {
+    id: CountriesPhonePrefixesUseCase.name,
+    class: CountriesPhonePrefixesUseCase,
+    type: 'class',
+  },
+  {
+    id: UpdateAccountUseCase.name,
+    class: UpdateAccountUseCase,
+    type: 'class',
+  },
 ];
 
 const MainContainer = new ContainerModule(

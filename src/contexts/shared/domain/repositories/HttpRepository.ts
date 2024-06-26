@@ -1,31 +1,31 @@
-import { HttpResponse, } from '../models/HttpResponseModel';
+import { HttpOperation, } from '../types/HttpOperation';
 
 export interface HttpRepository {
   get<T>(
     url: string, 
     params?: Record<string, any>,
-  ): Promise<HttpResponse<T>>;
+  ): Promise<HttpOperation<T>>;
   post<T>(
     url: string, 
     body: Record<string, any>, 
     params?: Record<string, any>,
-  ): Promise<HttpResponse<T>>;
+  ): Promise<HttpOperation<T>>;
   put<T>(
     url: string,
     body: Record<string, any>,
     params?: Record<string, any>,
-  ): Promise<HttpResponse<T>>;
+  ): Promise<HttpOperation<T>>;
   patch<T>(
     url: string,
     body: Record<string, any>,
     params?: Record<string, any>,
-  ): Promise<HttpResponse<T>>;
+  ): Promise<HttpOperation<T>>;
   delete<T>(
     url: string,
     params?: Record<string, any>,
-  ): Promise<HttpResponse<T>>;
+  ): Promise<HttpOperation<T>>;
   options<T = unknown>(
     url: string,
     params?: Record<string, any>,
-  ): Promise<HttpResponse<T>>;
+  ): Promise<HttpOperation<T>>;
 }

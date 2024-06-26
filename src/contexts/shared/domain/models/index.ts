@@ -5,4 +5,9 @@ export type { Address, } from './AddressModel';
 export type { Company, } from './CompanyModel';
 export type { Profile, } from './ProfileModel';
 export type { Permission, } from './PermissionModel';
-export type { HttpResponse, } from './HttpResponseModel';
+export type { 
+  Country, 
+  PhoneSuffix, 
+} from './CountryModel';
+export type { Region, } from './RegionModel';
+export type { Locality, } from './LocalityModel';

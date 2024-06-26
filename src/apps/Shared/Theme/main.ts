@@ -1,25 +1,30 @@
-import { 
-  createTheme, 
+import {
+  createTheme,
   Icon,
   Chip,
   MenuItem,
 } from '@mui/material';
-import resolveConfig from 'tailwindcss/resolveConfig';
-
-import tailwindConfig from '@root/tailwind.config';
 
 import Button from './Button.tsx';
 import Snackbar from './Snackbar.tsx';
 import Checkbox from './Checkbox.tsx';
 import TextField from './TextField.tsx';
 import Typography from './Typography.tsx';
-
-const tailwindTheme = resolveConfig(tailwindConfig);
+import DatePicker from './Datepicker.tsx';
 
 export const customTheme = createTheme({
   palette: {
     primary: {
-      ...tailwindTheme.theme.colors['juridica'],
+      '50': '#eef5ff',
+      '100': '#dae7ff',
+      '200': '#bdd6ff',
+      '300': '#90bcff',
+      '400': '#5493ff', // main
+      '500': '#3571fc',
+      '600': '#1f50f1',
+      '700': '#173bde',
+      '800': '#1932b4',
+      '900': '#1a2f8e',
     },
   },
   components: {
@@ -36,7 +41,7 @@ export const customTheme = createTheme({
   }
 });
 
-export { 
+export {
   Icon,
   Chip,
   Button,
@@ -45,4 +50,5 @@ export {
   MenuItem,
   TextField,
   Typography,
+  DatePicker,
 }

@@ -1,6 +1,11 @@
 import { Container, BindingScopeEnum, } from 'inversify';
 
+import { IndexedDatabaseService } from '@contexts/shared/infrastructure/services/IndexedDatabaseService';
+
 import { FetchHttpRepository, } from '@contexts/shared/infrastructure/repositories/FetchHttpRepository';
+import { LocalCacheRepository } from '@contexts/shared/infrastructure/repositories/LocalCacheRepository';
+import { HttpRemoteRepository, } from '@contexts/shared/infrastructure/repositories/HttpRemoteRepository';
+import { HttpPicklistRepository } from '@contexts/shared/infrastructure/repositories/HttpPicklistRepository';
 
 export type InjectableType = 'constant' | 'class';
 
@@ -20,6 +25,26 @@ const dependencies = [
 	{
 		id: FetchHttpRepository.name,
 		class: FetchHttpRepository,
+		type: 'class',
+	},
+	{
+		id: HttpRemoteRepository.name,
+		class: HttpRemoteRepository,
+		type: 'class',
+	},
+	{
+		id: IndexedDatabaseService.name,
+		class: IndexedDatabaseService,
+		type: 'class',
+	},
+	{
+		id: HttpPicklistRepository.name,
+		class: HttpPicklistRepository,
+		type: 'class',
+	},
+	{
+		id: LocalCacheRepository.name,
+		class: LocalCacheRepository,
 		type: 'class',
 	},
 ] as Injectable[];

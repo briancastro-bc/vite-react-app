@@ -21,6 +21,7 @@ export interface UserRepository {
   getAgent(): Promise<any | null>;
   findUserByEmail(email: string): Promise<Partial<User> | null>;
   create(user: User): Promise<Partial<User> | null>;
+  update(user: User): Promise<SuccessfullyOperation | UnsuccessfullyOperation>;
   sendEmailVerificationCode(): Promise<SuccessfullyOperation | UnsuccessfullyOperation>;
   verifyEmail(code: string): Promise<SuccessfullyOperation | UnsuccessfullyOperation>;
   sendPhoneVerificationCode(): Promise<SuccessfullyOperation | UnsuccessfullyOperation>;
