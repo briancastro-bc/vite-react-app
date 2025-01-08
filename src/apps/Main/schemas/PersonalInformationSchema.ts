@@ -4,11 +4,13 @@ import { GENDER_TYPE, IDENTIFICATION_TYPE } from '@contexts/shared/domain/value-
 
 export const PersonalInformationSchema = z.object({
   gender: z.optional(
-    z.enum([
-      GENDER_TYPE.MALE.codeName,
-      GENDER_TYPE.FEMALE.codeName,
-      GENDER_TYPE.NOT_SPECIFIED.codeName,
-    ]),
+    // z.enum([
+    //   GENDER_TYPE.MALE.codeName,
+    //   GENDER_TYPE.FEMALE.codeName,
+    //   GENDER_TYPE.NOT_SPECIFIED.codeName,
+    // ]),
+    z.coerce
+      .string(),
   ),
   identificationNumber: z.optional(
     z.coerce

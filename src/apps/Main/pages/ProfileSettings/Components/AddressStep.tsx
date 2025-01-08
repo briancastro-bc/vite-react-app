@@ -140,6 +140,8 @@ const AddressStep: FC<AddressStepProps> = ({
     };
   }, [getLocationPicklists,]);
 
+  console.log('profile', profile);
+
   return (
     <section className='w-full h-auto overflow-y-auto'>
       <div className='h-full p-6 flex flex-col gap-y-8'>
@@ -162,26 +164,17 @@ const AddressStep: FC<AddressStepProps> = ({
               </div>
               <div className='col-span-2 grid grid-cols-3 gap-x-6 gap-y-4'>
                 <div className='col-span-3'>
-                  <Controller
-                    render={({ field, fieldState, }) => (
-                      <TextField
-                        {...field}
-                        clipboard
-                        disabled={AddressSchema.shape.formatted._def.innerType instanceof z.ZodReadonly}
-                        variant='outlined'
-                        color='primary'
-                        InputProps={{
-                          startAdornment: <Business />
-                        }}
-                        label={t(`profileSettings.steps.${ADDRESS_STEP}.formatted.label`)}
-                        placeholder={t(`profileSettings.steps.${ADDRESS_STEP}.formatted.placeholder`)}
-                        error={fieldState?.invalid && (fieldState?.isDirty || fieldState?.isTouched)}
-                        helperText={fieldState?.error && fieldState?.error?.message}
-                        required={AddressSchema.shape.formatted instanceof z.ZodOptional} />
-                    )}
-                    control={control}
-                    name='formatted'
-                    defaultValue={`${profile?.address?.country}` ?? ''} />
+                    <TextField
+                      value={`${profile?.address?.country}, ${profile?.address?.region}, ${profile?.address?.locality} ${profile?.address?.street ?? ''} ${profile?.address?.streetComplement ?? ''} ${profile?.address?.postalCode ?? ''}`}
+                      clipboard
+                      disabled={AddressSchema.shape.formatted._def.innerType instanceof z.ZodReadonly}
+                      variant='outlined'
+                      color='primary'
+                      InputProps={{
+                        startAdornment: <Business />
+                      }}
+                      label={t(`profileSettings.steps.${ADDRESS_STEP}.formatted.label`)}
+                      placeholder={t(`profileSettings.steps.${ADDRESS_STEP}.formatted.placeholder`)}/>
                 </div>
               </div>
             </div>

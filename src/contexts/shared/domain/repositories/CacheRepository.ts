@@ -5,7 +5,6 @@ import {
 } from '../models';
 
 export interface CacheRepository {
-  // checkStoredDataVersion(): any;
   cache(): Promise<void>;
   aggregateRemoteData(): Promise<{
     [key: string]: Array<Country | Region | Locality> | [],

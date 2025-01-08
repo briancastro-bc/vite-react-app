@@ -1,10 +1,14 @@
 import 'reflect-metadata';
 
+import es from '@assets/locales/es.json';
+import en from '@assets/locales/en.json';
+
 import { 
   Suspense, 
   StrictMode, 
 } from 'react';
 import { createRoot, } from 'react-dom/client';
+
 import { 
   ThemeProvider, 
   StyledEngineProvider, 
@@ -17,10 +21,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 import { customTheme, } from '@theme/main';
 
-import { bootstrapContainer, Container, } from '@ioc/inversify';
-
-import es from '@assets/locales/es.json';
-import en from '@assets/locales/en.json';
+import { container, } from '@ioc/inversify';
 
 import App from './App.tsx';
 
@@ -28,7 +29,6 @@ import './index.css';
 
 type Setup = object & {
   i18n: TFunction;
-  container: Container;
 };
 
 async function bootstrapI18N(): Promise<TFunction> {
@@ -54,12 +54,10 @@ async function bootstrapI18N(): Promise<TFunction> {
 
 async function bootstrap(): Promise<Setup> {
   const i18n = await bootstrapI18N();
-  const container = bootstrapContainer();
 
   return {
     i18n,
-    container,
-  }
+  };
 }
 
 bootstrap()
@@ -67,6 +65,11 @@ bootstrap()
     const {
       i18n,
     } = setup;
+
+    const props = {
+      ...setup,
+      container,
+    }
 
     const rootElement = document.getElementById('root')!;
 
@@ -76,7 +79,7 @@ bootstrap()
           <Suspense fallback={<p>{i18n('common.loading.basic')}</p>}>
             <ThemeProvider theme={customTheme}>
               <StyledEngineProvider injectFirst>
-                <App {...setup}/>
+                <App {...props}/>
               </StyledEngineProvider>
             </ThemeProvider>
           </Suspense>

@@ -4,15 +4,11 @@ import { bindCoreDependencies } from './dependencies';
 
 import MainContainer from '@apps/Main/container';
 
-export function bootstrapContainer(): Container {
-  const container = bindCoreDependencies(new Container({
-    defaultScope: 'Singleton',
-  }));
+const container = bindCoreDependencies(new Container({
+  defaultScope: 'Singleton',
+}));
 
-  container.load(MainContainer);
-
-  return container;
-}
+container.load(MainContainer);
 
 export * from 'inversify';
 export type {
@@ -20,3 +16,6 @@ export type {
   InjectableType,
   bindCoreDependencies,
 } from './dependencies';
+export {
+  container,
+};
